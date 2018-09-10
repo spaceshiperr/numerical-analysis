@@ -18,6 +18,10 @@ namespace InterpolationApp
 
         private static Tuple<double, double> Segment = Tuple.Create(0.5, 1.5);
 
+        private static int DeltaDegree = 4;
+
+        private static double Precision = Math.Pow(10, -5);
+
         public MainForm()
         {
             InitializeComponent();
@@ -25,16 +29,24 @@ namespace InterpolationApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            interpolation = new Interpolation(Math.Sin, Segment, Step);
+            interpolation = new Interpolation(Math.Sin, Segment, Step, Precision, DeltaDegree);
             fillPointValueGrid();
+            correctPointValueGridSize();
         }
 
         private void fillPointValueGrid()
         {
             for (int i = 0; i < interpolation.Points.Count; i++)
             {
+                
                 pointValueGrid.Rows.Add(interpolation.Points[i], interpolation.Values[i]);
+                pointValueGrid.Rows.Add();
             }
+        }
+
+        private void correctPointValueGridSize()
+        {
+            pointValueGrid.Rows.RemoveAt(pointValueGrid.Rows.Count - 2);
         }
     }
 }

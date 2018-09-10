@@ -34,6 +34,10 @@
             this.pointValueGrid = new System.Windows.Forms.DataGridView();
             this.Points = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Values = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deltaY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.delta2Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.delta3Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.delta4Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pointValueGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -69,10 +73,14 @@
             this.pointValueGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.pointValueGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Points,
-            this.Values});
-            this.pointValueGrid.Location = new System.Drawing.Point(34, 87);
+            this.Values,
+            this.deltaY,
+            this.delta2Y,
+            this.delta3Y,
+            this.delta4Y});
+            this.pointValueGrid.Location = new System.Drawing.Point(21, 66);
             this.pointValueGrid.Name = "pointValueGrid";
-            this.pointValueGrid.Size = new System.Drawing.Size(245, 315);
+            this.pointValueGrid.Size = new System.Drawing.Size(689, 332);
             this.pointValueGrid.TabIndex = 3;
             // 
             // Points
@@ -84,6 +92,26 @@
             // 
             this.Values.HeaderText = "y";
             this.Values.Name = "Values";
+            // 
+            // deltaY
+            // 
+            this.deltaY.HeaderText = "Δ y";
+            this.deltaY.Name = "deltaY";
+            // 
+            // delta2Y
+            // 
+            this.delta2Y.HeaderText = "Δ ² y";
+            this.delta2Y.Name = "delta2Y";
+            // 
+            // delta3Y
+            // 
+            this.delta3Y.HeaderText = "Δ ³ y";
+            this.delta3Y.Name = "delta3Y";
+            // 
+            // delta4Y
+            // 
+            this.delta4Y.HeaderText = "Δ ⁴ y";
+            this.delta4Y.Name = "delta4Y";
             // 
             // MainForm
             // 
@@ -111,6 +139,10 @@
         private System.Windows.Forms.DataGridView pointValueGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn Points;
         private System.Windows.Forms.DataGridViewTextBoxColumn Values;
+        private System.Windows.Forms.DataGridViewTextBoxColumn deltaY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn delta2Y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn delta3Y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn delta4Y;
     }
 }
 
