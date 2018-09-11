@@ -42,6 +42,25 @@ namespace InterpolationApp
                 pointValueGrid.Rows.Add(interpolation.Points[i], interpolation.Values[i]);
                 pointValueGrid.Rows.Add();
             }
+
+            int rowStartIndex = 1;
+            int columnIndex = 2;
+
+            foreach (var deltasI in interpolation.Deltas)
+            {
+                int rowIndex = rowStartIndex;
+
+                foreach (var delta in deltasI)
+                {
+                    double revPrecision = 1 / Precision;
+                    double value = Math.Truncate(revPrecision * delta) / revPrecision;
+                    pointValueGrid[columnIndex, rowIndex].Value = value;
+                    rowIndex += 2;
+                }
+
+                rowStartIndex++;
+                columnIndex++;
+            }
         }
 
         private void correctPointValueGridSize()
