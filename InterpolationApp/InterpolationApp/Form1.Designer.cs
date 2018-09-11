@@ -38,35 +38,43 @@
             this.delta2Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.delta3Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.delta4Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.diffTabPage = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pointValueGrid)).BeginInit();
+            this.MainTabControl.SuspendLayout();
+            this.diffTabPage.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 32);
+            this.label1.Location = new System.Drawing.Point(18, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(141, 13);
+            this.label1.Size = new System.Drawing.Size(249, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "f(x) = sin(x), [a, b] = [0.5, 1.5]";
+            this.label1.Text = "Функция f(x) = sin(x), на отрезке [a, b] = [0.5, 1.5]";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(198, 32);
+            this.label2.Location = new System.Drawing.Point(367, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 13);
+            this.label2.Size = new System.Drawing.Size(235, 13);
             this.label2.TabIndex = 1;
-            this.label2.Text = "x2 = 1.55, x3 = 1.05";
+            this.label2.Text = "Точки интерполирования: x2 = 1.55, x3 = 1.05";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(338, 32);
+            this.label3.Location = new System.Drawing.Point(18, 35);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(131, 13);
+            this.label3.Size = new System.Drawing.Size(116, 13);
             this.label3.TabIndex = 2;
-            this.label3.Text = "h = 0.1, E = 1/2 * ((10)^-5)";
+            this.label3.Text = "Шаг для узлов h = 0.1";
             // 
             // pointValueGrid
             // 
@@ -78,9 +86,10 @@
             this.delta2Y,
             this.delta3Y,
             this.delta4Y});
-            this.pointValueGrid.Location = new System.Drawing.Point(21, 66);
+            this.pointValueGrid.Location = new System.Drawing.Point(17, 18);
             this.pointValueGrid.Name = "pointValueGrid";
-            this.pointValueGrid.Size = new System.Drawing.Size(689, 332);
+            this.pointValueGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.pointValueGrid.Size = new System.Drawing.Size(648, 315);
             this.pointValueGrid.TabIndex = 3;
             // 
             // Points
@@ -113,21 +122,75 @@
             this.delta4Y.HeaderText = "Δ ⁴ y";
             this.delta4Y.Name = "delta4Y";
             // 
+            // MainTabControl
+            // 
+            this.MainTabControl.Controls.Add(this.diffTabPage);
+            this.MainTabControl.Controls.Add(this.tabPage2);
+            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.MainTabControl.Location = new System.Drawing.Point(0, 67);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(681, 383);
+            this.MainTabControl.TabIndex = 4;
+            // 
+            // diffTabPage
+            // 
+            this.diffTabPage.Controls.Add(this.pointValueGrid);
+            this.diffTabPage.Location = new System.Drawing.Point(4, 22);
+            this.diffTabPage.Name = "diffTabPage";
+            this.diffTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.diffTabPage.Size = new System.Drawing.Size(673, 357);
+            this.diffTabPage.TabIndex = 0;
+            this.diffTabPage.Text = "Разности";
+            this.diffTabPage.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(673, 357);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(681, 61);
+            this.panel1.TabIndex = 5;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(367, 35);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(206, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Точность вычислений E = 1/2 * ((10)^-5)";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.pointValueGrid);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(681, 450);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.MainTabControl);
             this.Name = "MainForm";
             this.Text = "Interpolation App";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pointValueGrid)).EndInit();
+            this.MainTabControl.ResumeLayout(false);
+            this.diffTabPage.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -143,6 +206,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn delta2Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn delta3Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn delta4Y;
+        private System.Windows.Forms.TabControl MainTabControl;
+        private System.Windows.Forms.TabPage diffTabPage;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label4;
     }
 }
 
