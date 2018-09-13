@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace InterpolationApp
@@ -30,11 +23,13 @@ namespace InterpolationApp
         private void MainForm_Load(object sender, EventArgs e)
         {
             interpolation = new Interpolation(Math.Sin, Segment, Step, Precision, DeltaDegree);
-            fillPointValueGrid();
-            correctPointValueGridSize();
+            FillPointValueGrid();
+            CorrectPointValueGridSize();
+            InitPolynomialGrid();
+            FillPolynomialGrid();
         }
 
-        private void fillPointValueGrid()
+        private void FillPointValueGrid()
         {
             for (int i = 0; i < interpolation.Points.Count; i++)
             {
@@ -52,9 +47,7 @@ namespace InterpolationApp
 
                 foreach (var delta in deltasI)
                 {
-                    double revPrecision = 1 / Precision;
-                    double value = Math.Truncate(revPrecision * delta) / revPrecision;
-                    pointValueGrid[columnIndex, rowIndex].Value = value;
+                    pointValueGrid[columnIndex, rowIndex].Value = interpolation.TruncateValue(Precision, delta);
                     rowIndex += 2;
                 }
 
@@ -63,9 +56,39 @@ namespace InterpolationApp
             }
         }
 
-        private void correctPointValueGridSize()
+        private void FillPolynomialGrid()
+        {
+            polynomialGrid[1, 0].Value = interpolation.Values[0];
+            polynomialGrid[1, 2].Value = string.Concat(polynomialGrid[1, 0].Value, " * ", polynomialGrid[1, 1].Value);
+
+            int k = 4;
+            for (int i = 0; i < k; i++)
+            {
+                polynomialGrid[i + 2, 0].Value = interpolation.TruncateValue(Precision, interpolation.Deltas[i][0]);
+                polynomialGrid[i + 2, 2].Value = string.Concat(polynomialGrid[i + 2, 0].Value, " * ",polynomialGrid[i + 2, 1].Value);
+            }
+        }
+
+        private void CorrectPointValueGridSize()
         {
             pointValueGrid.Rows.RemoveAt(pointValueGrid.Rows.Count - 2);
         }
+
+        private void InitPolynomialGrid()
+        {
+            polynomialGrid.Rows.Add("delta k y0");
+            polynomialGrid.Rows.Add("Nk(t)");
+            polynomialGrid.Rows.Add("Nk(t) * delta k y0");
+            polynomialGrid.Rows.Add("Pk(x1)");
+            polynomialGrid.Rows.Add("f(x1)-Pk(x1)");
+            polynomialGrid.Rows.Add("|Rk(x1)|");
+
+            polynomialGrid[1, 1].Value = "1";
+            polynomialGrid[2, 1].Value = "t";
+            polynomialGrid[3, 1].Value = "t * (t - 1) / k";
+            polynomialGrid[4, 1].Value = "t * (t - 1) * (t - 2) / k ^ 3";
+            polynomialGrid[5, 1].Value = "t * (t - 1) * (t - 2) * (t - 3) / k ^ 3";
+        }
+
     }
 }

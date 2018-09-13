@@ -40,13 +40,22 @@
             this.delta4Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.diffTabPage = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.polynomialTabPage = new System.Windows.Forms.TabPage();
+            this.polynomialGrid = new System.Windows.Forms.DataGridView();
+            this.ColumnK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pointValueGrid)).BeginInit();
             this.MainTabControl.SuspendLayout();
             this.diffTabPage.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.polynomialTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.polynomialGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -78,6 +87,7 @@
             // 
             // pointValueGrid
             // 
+            this.pointValueGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.pointValueGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.pointValueGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Points,
@@ -86,10 +96,11 @@
             this.delta2Y,
             this.delta3Y,
             this.delta4Y});
-            this.pointValueGrid.Location = new System.Drawing.Point(17, 18);
+            this.pointValueGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pointValueGrid.Location = new System.Drawing.Point(3, 3);
             this.pointValueGrid.Name = "pointValueGrid";
             this.pointValueGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.pointValueGrid.Size = new System.Drawing.Size(648, 315);
+            this.pointValueGrid.Size = new System.Drawing.Size(808, 351);
             this.pointValueGrid.TabIndex = 3;
             // 
             // Points
@@ -125,12 +136,12 @@
             // MainTabControl
             // 
             this.MainTabControl.Controls.Add(this.diffTabPage);
-            this.MainTabControl.Controls.Add(this.tabPage2);
+            this.MainTabControl.Controls.Add(this.polynomialTabPage);
             this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.MainTabControl.Location = new System.Drawing.Point(0, 67);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(681, 383);
+            this.MainTabControl.Size = new System.Drawing.Size(822, 383);
             this.MainTabControl.TabIndex = 4;
             // 
             // diffTabPage
@@ -139,20 +150,10 @@
             this.diffTabPage.Location = new System.Drawing.Point(4, 22);
             this.diffTabPage.Name = "diffTabPage";
             this.diffTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.diffTabPage.Size = new System.Drawing.Size(673, 357);
+            this.diffTabPage.Size = new System.Drawing.Size(814, 357);
             this.diffTabPage.TabIndex = 0;
             this.diffTabPage.Text = "Разности";
             this.diffTabPage.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(673, 357);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
@@ -163,7 +164,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(681, 61);
+            this.panel1.Size = new System.Drawing.Size(822, 61);
             this.panel1.TabIndex = 5;
             // 
             // label4
@@ -175,11 +176,69 @@
             this.label4.TabIndex = 3;
             this.label4.Text = "Точность вычислений E = 1/2 * ((10)^-5)";
             // 
+            // polynomialTabPage
+            // 
+            this.polynomialTabPage.Controls.Add(this.polynomialGrid);
+            this.polynomialTabPage.Location = new System.Drawing.Point(4, 22);
+            this.polynomialTabPage.Name = "polynomialTabPage";
+            this.polynomialTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.polynomialTabPage.Size = new System.Drawing.Size(814, 357);
+            this.polynomialTabPage.TabIndex = 1;
+            this.polynomialTabPage.Text = "Таблица для полинома";
+            this.polynomialTabPage.UseVisualStyleBackColor = true;
+            // 
+            // polynomialGrid
+            // 
+            this.polynomialGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.polynomialGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.polynomialGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnK,
+            this.Column0,
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4});
+            this.polynomialGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.polynomialGrid.Location = new System.Drawing.Point(3, 3);
+            this.polynomialGrid.Name = "polynomialGrid";
+            this.polynomialGrid.Size = new System.Drawing.Size(808, 351);
+            this.polynomialGrid.TabIndex = 0;
+            // 
+            // ColumnK
+            // 
+            this.ColumnK.HeaderText = "k";
+            this.ColumnK.Name = "ColumnK";
+            // 
+            // Column0
+            // 
+            this.Column0.HeaderText = "0";
+            this.Column0.Name = "Column0";
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "1";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "2";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "3";
+            this.Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "4";
+            this.Column4.Name = "Column4";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 450);
+            this.ClientSize = new System.Drawing.Size(822, 450);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.MainTabControl);
             this.Name = "MainForm";
@@ -190,6 +249,8 @@
             this.diffTabPage.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.polynomialTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.polynomialGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -208,9 +269,16 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn delta4Y;
         private System.Windows.Forms.TabControl MainTabControl;
         private System.Windows.Forms.TabPage diffTabPage;
-        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TabPage polynomialTabPage;
+        private System.Windows.Forms.DataGridView polynomialGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnK;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column0;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }
 

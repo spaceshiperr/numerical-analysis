@@ -54,6 +54,8 @@ namespace InterpolationApp
         /// </summary>
         public FunctionDelegate Function;
 
+        public FunctionDelegate NFunction;
+
         public Interpolation(FunctionDelegate function, 
                              Tuple<double, double> segment, 
                              double step, 
@@ -66,13 +68,13 @@ namespace InterpolationApp
             Precision = precision;
             DeltaDegree = deltaDegree;
 
-            generatePoints();
-            generateValues();
-            generateDeltas();
+            GeneratePoints();
+            GenerateValues();
+            GenerateDeltas();
         }
 
 
-        private void generatePoints()
+        private void GeneratePoints()
         {
             Points = new List<double>();
 
@@ -85,19 +87,17 @@ namespace InterpolationApp
             }
         }
 
-        private void generateValues()
+        private void GenerateValues()
         {
             Values = new List<double>();
 
             foreach (double p in Points)
             {
-                double revPrecision = 1 / Precision;
-                double value = Math.Truncate(revPrecision * Function(p)) / revPrecision;
-                Values.Add(value);
+                Values.Add(TruncateValue(Precision, Function(p)));
             }
         }
 
-        private void generateDeltas()
+        private void GenerateDeltas()
         {
             Deltas = new List<List<double>>();
 
@@ -117,6 +117,27 @@ namespace InterpolationApp
                 }
                 Deltas.Add(deltasI);
             }
+        }
+        
+        private List<FunctionDelegate> GenerateNFunctions(int k)
+        {
+            var NFunctions = new List<FunctionDelegate>
+            {
+                t => 1,
+                t => t
+            };
+
+            for (int i = 2; i <= k; i++)
+            {
+                NFunctions.Add(t => NFunctions[NFunctions.Count - 1](t) * (t - i + 1) / k);
+            }
+            return NFunctions;
+        }
+
+        public double TruncateValue(double precision, double value)
+        {
+            double revPrecision = 1 / Precision;
+            return Math.Truncate(revPrecision * value) / revPrecision;
         }
     }
 }
