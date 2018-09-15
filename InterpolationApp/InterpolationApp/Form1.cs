@@ -12,6 +12,7 @@ namespace InterpolationApp
         private static int DeltaDegree = 4;
         private static double Precision = Math.Pow(10, -5);
         private static Interpolation.FunctionDelegate Function = Math.Sin;
+        private static double InterpolationPoint = 1.05;
 
         public MainForm()
         {
@@ -23,11 +24,12 @@ namespace InterpolationApp
             var points = Interpolation.GetPoints(Segment, Step);
             var values = Interpolation.GetValues(Function, points, Precision);
             var deltas = Interpolation.GetDeltas(values, DeltaDegree);
+            var approximations = Interpolation.Interpolate(InterpolationPoint, values, points, DeltaDegree);
 
             FillPointValueGrid(points, values, deltas);
             CorrectPointValueGridSize();
             InitPolynomialGrid();
-            FillPolynomialGrid(values, deltas);
+            FillPolynomialGrid(values, deltas, approximations);
         }
 
         private void FillPointValueGrid(List<double> points, List<double> values, List<List<double>> deltas)
@@ -35,12 +37,12 @@ namespace InterpolationApp
             for (int i = 0; i < points.Count; i++)
             {
                 
-                pointValueGrid.Rows.Add(points[i], values[i]);
+                pointValueGrid.Rows.Add(points[i]);
                 pointValueGrid.Rows.Add();
             }
 
             int rowStartIndex = 1;
-            int columnIndex = 2;
+            int columnIndex = 1;
 
             foreach (var deltasI in deltas)
             {
@@ -57,17 +59,24 @@ namespace InterpolationApp
             }
         }
 
-        private void FillPolynomialGrid(List<double> values, List<List<double>> deltas)
+        private void FillPolynomialGrid(List<double> values, List<List<double>> deltas, List<double> approximations)
         {
             polynomialGrid[1, 0].Value = values[0];
             polynomialGrid[1, 2].Value = string.Concat(polynomialGrid[1, 0].Value, " * ", polynomialGrid[1, 1].Value);
 
-            int k = 4;
-            for (int i = 0; i < k; i++)
+            for (int i = 0; i < DeltaDegree; i++)
             {
                 polynomialGrid[i + 2, 0].Value = Interpolation.Truncate(Precision, deltas[i][0]);
                 polynomialGrid[i + 2, 2].Value = string.Concat(polynomialGrid[i + 2, 0].Value, " * ",polynomialGrid[i + 2, 1].Value);
+                
             }
+
+            for (int i = 1; i < polynomialGrid.ColumnCount; i++)
+            {
+                polynomialGrid[i, 3].Value = approximations[i - 1];
+            }
+
+
         }
 
         private void CorrectPointValueGridSize()

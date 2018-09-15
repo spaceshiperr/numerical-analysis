@@ -12,6 +12,8 @@ namespace InterpolationApp
         /// <returns>Значение функции в точке x</returns>
         public delegate double FunctionDelegate(double x);
 
+        public delegate double NFunctionDelegate(double x, double prevN);
+
         /// <summary>
         /// Вычисление координат равностоящих интерполяционных узлов
         /// </summary>
@@ -20,10 +22,14 @@ namespace InterpolationApp
         /// <returns>Список вещественных узлов из отрезка segment, отстоящих друг от друга на step</returns>
         public static List<double> GetPoints(Tuple<double, double> segment, double step)
         {
+            if (segment.Item1 > segment.Item2)
+                throw new ArgumentException("Left coordinate of the segment must not be greater than the right!");
+            else if (segment.Item2 - segment.Item1 < step)
+                throw new ArgumentException("Step must be smaller than the length of the segment");
+
             var points = new List<double>();
 
             var n = Math.Round((segment.Item2 - segment.Item1) / step) + 1;
-
 
             for (int i = 0; i < n; i++)
             {
@@ -65,7 +71,12 @@ namespace InterpolationApp
             }
             deltas.Add(deltas0);
 
-            for (int i = 1; i < degree; i++)
+            if (degree < 0)
+                throw new ArgumentException("Degree must be non-negative!");
+            else if (degree == 0)
+                return deltas;
+
+            for (int i = 1; i <= degree; i++)
             {
                 var deltasI = new List<double>();
                 for (int j = 0; j < deltas[i - 1].Count - 1; j++)
@@ -83,17 +94,23 @@ namespace InterpolationApp
         /// </summary>
         /// <param name="k">Необходимый наивысший порядок для системы функций</param>
         /// <returns>Список делегатов функций double -> double</returns>
-        public static List<FunctionDelegate> GenerateNFunctions(int k)
+        public static List<NFunctionDelegate> GenerateNFunctions(int k)
         {
-            var NFunctions = new List<FunctionDelegate>
+            var NFunctions = new List<NFunctionDelegate>
             {
-                t => 1,
-                t => t
+                (t, prevN) => 1,
+                (t, prevN) => t
             };
+
+            if (k < 0)
+                throw new ArgumentException("Number k must be non-negative!");
+            else if (k <= 1)
+                return NFunctions;
+
 
             for (int i = 2; i <= k; i++)
             {
-                NFunctions.Add(t => NFunctions[NFunctions.Count - 1](t) * (t - i + 1) / k);
+                NFunctions.Add((t, prevN) =>  prevN * (t - i + 1) / k);
             }
             return NFunctions;
         }
@@ -143,6 +160,25 @@ namespace InterpolationApp
             }
 
             return NFunctions;
+        }
+
+        public static List<double> Interpolate(double x, List<double> values, List<double> points, int k)
+        {
+            var approxValues = new List<double>();
+
+            double prevP = 0;
+            double prevN = 1;
+            var deltas = GetDeltas(values, k);
+            var nFunctions = GenerateNFunctions(k);
+
+            for (int i = 0; i <= k; i++)
+            {
+                prevN = nFunctions[i](x, prevN);
+                prevP = prevP + prevN * deltas[i][0];
+                approxValues.Add(prevP);
+            }
+
+            return approxValues;
         }
     }
 }
