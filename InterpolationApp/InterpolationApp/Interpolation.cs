@@ -76,7 +76,7 @@ namespace InterpolationApp
             else if (degree == 0)
                 return deltas;
 
-            for (int i = 1; i <= degree; i++)
+            for (int i = 1; i < degree; i++)
             {
                 var deltasI = new List<double>();
                 for (int j = 0; j < deltas[i - 1].Count - 1; j++)
@@ -110,7 +110,7 @@ namespace InterpolationApp
 
             for (int i = 2; i <= k; i++)
             {
-                NFunctions.Add((t, prevN) =>  prevN * (t - i + 1) / k);
+                NFunctions.Add((t, prevN) =>  prevN * (t - i + 1) / i);
             }
             return NFunctions;
         }
@@ -151,12 +151,13 @@ namespace InterpolationApp
                 return NFunctions;
 
             string numerator = t;
+            var denominator = 1;
 
             for (int i = 2; i <= k; i++)
             {
                 numerator += " * (" + t + (-i + 1).ToString() + ")";
-                var denominator = Math.Pow(i, i - 1).ToString();
-                NFunctions.Add(numerator + " / " + denominator);
+                denominator *= i;
+                NFunctions.Add(numerator + " / " + denominator.ToString());
             }
 
             return NFunctions;
@@ -169,8 +170,10 @@ namespace InterpolationApp
             double prevP = 0;
             double prevN = 1;
             var deltas = GetDeltas(values, k);
+            deltas.Insert(0, values);
             var nFunctions = GenerateNFunctions(k);
 
+            //N for k = 2 isn't right for some reason
             for (int i = 0; i <= k; i++)
             {
                 prevN = nFunctions[i](x, prevN);

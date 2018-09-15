@@ -37,12 +37,12 @@ namespace InterpolationApp
             for (int i = 0; i < points.Count; i++)
             {
                 
-                pointValueGrid.Rows.Add(points[i]);
+                pointValueGrid.Rows.Add(points[i], values[i]);
                 pointValueGrid.Rows.Add();
             }
 
             int rowStartIndex = 1;
-            int columnIndex = 1;
+            int columnIndex = 2;
 
             foreach (var deltasI in deltas)
             {
@@ -74,8 +74,8 @@ namespace InterpolationApp
             for (int i = 1; i < polynomialGrid.ColumnCount; i++)
             {
                 polynomialGrid[i, 3].Value = approximations[i - 1];
+                polynomialGrid[i, 4].Value = values[i - 1] - approximations[i - 1];
             }
-
 
         }
 
