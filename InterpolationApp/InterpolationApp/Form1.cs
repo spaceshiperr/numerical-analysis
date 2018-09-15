@@ -1,19 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace InterpolationApp
 {
     public partial class MainForm : Form
     {
-        static Interpolation interpolation;
-
+        // Input data
         private static double Step = 0.1;
-
         private static Tuple<double, double> Segment = Tuple.Create(0.5, 1.5);
-
         private static int DeltaDegree = 4;
-
         private static double Precision = Math.Pow(10, -5);
+        private static Interpolation.FunctionDelegate Function = Math.Sin;
 
         public MainForm()
         {
@@ -22,32 +20,35 @@ namespace InterpolationApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            interpolation = new Interpolation(Math.Sin, Segment, Step, Precision, DeltaDegree);
-            FillPointValueGrid();
+            var points = Interpolation.GetPoints(Segment, Step);
+            var values = Interpolation.GetValues(Function, points, Precision);
+            var deltas = Interpolation.GetDeltas(values, DeltaDegree);
+
+            FillPointValueGrid(points, values, deltas);
             CorrectPointValueGridSize();
             InitPolynomialGrid();
-            FillPolynomialGrid();
+            FillPolynomialGrid(values, deltas);
         }
 
-        private void FillPointValueGrid()
+        private void FillPointValueGrid(List<double> points, List<double> values, List<List<double>> deltas)
         {
-            for (int i = 0; i < interpolation.Points.Count; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 
-                pointValueGrid.Rows.Add(interpolation.Points[i], interpolation.Values[i]);
+                pointValueGrid.Rows.Add(points[i], values[i]);
                 pointValueGrid.Rows.Add();
             }
 
             int rowStartIndex = 1;
             int columnIndex = 2;
 
-            foreach (var deltasI in interpolation.Deltas)
+            foreach (var deltasI in deltas)
             {
                 int rowIndex = rowStartIndex;
 
                 foreach (var delta in deltasI)
                 {
-                    pointValueGrid[columnIndex, rowIndex].Value = interpolation.TruncateValue(Precision, delta);
+                    pointValueGrid[columnIndex, rowIndex].Value = Interpolation.Truncate(Precision, delta);
                     rowIndex += 2;
                 }
 
@@ -56,15 +57,15 @@ namespace InterpolationApp
             }
         }
 
-        private void FillPolynomialGrid()
+        private void FillPolynomialGrid(List<double> values, List<List<double>> deltas)
         {
-            polynomialGrid[1, 0].Value = interpolation.Values[0];
+            polynomialGrid[1, 0].Value = values[0];
             polynomialGrid[1, 2].Value = string.Concat(polynomialGrid[1, 0].Value, " * ", polynomialGrid[1, 1].Value);
 
             int k = 4;
             for (int i = 0; i < k; i++)
             {
-                polynomialGrid[i + 2, 0].Value = interpolation.TruncateValue(Precision, interpolation.Deltas[i][0]);
+                polynomialGrid[i + 2, 0].Value = Interpolation.Truncate(Precision, deltas[i][0]);
                 polynomialGrid[i + 2, 2].Value = string.Concat(polynomialGrid[i + 2, 0].Value, " * ",polynomialGrid[i + 2, 1].Value);
             }
         }
@@ -80,14 +81,14 @@ namespace InterpolationApp
             polynomialGrid.Rows.Add("Nk(t)");
             polynomialGrid.Rows.Add("Nk(t) * delta k y0");
             polynomialGrid.Rows.Add("Pk(x1)");
-            polynomialGrid.Rows.Add("f(x1)-Pk(x1)");
+            polynomialGrid.Rows.Add("f(x1)-Pk(x1)");    
             polynomialGrid.Rows.Add("|Rk(x1)|");
 
-            polynomialGrid[1, 1].Value = "1";
-            polynomialGrid[2, 1].Value = "t";
-            polynomialGrid[3, 1].Value = "t * (t - 1) / k";
-            polynomialGrid[4, 1].Value = "t * (t - 1) * (t - 2) / k ^ 3";
-            polynomialGrid[5, 1].Value = "t * (t - 1) * (t - 2) * (t - 3) / k ^ 3";
+            var formulas = Interpolation.GenerateFormulaNFunctions(DeltaDegree, "t");
+            for (int i = 1; i < polynomialGrid.ColumnCount; i++)
+            {
+                polynomialGrid[i, 1].Value = formulas[i - 1];
+            }
         }
 
     }

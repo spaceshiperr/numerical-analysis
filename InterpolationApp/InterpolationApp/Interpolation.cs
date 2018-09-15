@@ -1,75 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Text;
 
 namespace InterpolationApp
 {
-    public class Interpolation
+    public static class Interpolation
     {
-        /// <summary>
-        /// Список узлов интерполяции
-        /// </summary>
-        //public List<double> Points { get; set; }
-
-        /// <summary>
-        /// Список значений функции в узлах интерполяции
-        /// </summary>
-        //public List<double> Values { get; set; }
-
-        /// <summary>
-        /// Шаг для узлов интерполяции
-        /// </summary>
-        //public double Step { get; set; }
-
-        /// <summary>
-        /// Отрезок, из которого берутся равностоящие значения узлов с шагом Step
-        /// </summary>
-        //public Tuple<double, double> Segment { get; set; }
-
-        /// <summary>
-        /// Точность вычисления значений функции
-        /// </summary>
-        //public double Precision { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        //public int DeltaDegree { get; set; }
-
         /// <summary>
         /// Делегат интерполируемой функции
         /// </summary>
         /// <param name="x">Вещественный аргумент функции</param>
-        /// <returns></returns>
+        /// <returns>Значение функции в точке x</returns>
         public delegate double FunctionDelegate(double x);
-
-        /// <summary>
-        /// Списки конечных разностей порядка до DeltaDegree
-        /// </summary>
-        //public List<List<double>> Deltas { get; set; }
-
-        /// <summary>
-        /// Интерполируемая функция
-        /// </summary>
-        //public FunctionDelegate Function;
-
-        public Interpolation(FunctionDelegate function, 
-                             Tuple<double, double> segment, 
-                             double step, 
-                             double precision, 
-                             int deltaDegree)
-        {
-            //Function = function;
-            //Segment = segment;
-            //Step = step;
-            //Precision = precision;
-            //DeltaDegree = deltaDegree;
-
-            //GeneratePoints();
-            //GenerateValues();
-            //GenerateDeltas();
-        }
 
         /// <summary>
         /// Вычисление координат равностоящих интерполяционных узлов
@@ -77,7 +18,7 @@ namespace InterpolationApp
         /// <param name="segment">Пара из координат начальной и конечной точек отрезка</param>
         /// <param name="step">Шаг для равностоящих узлов</param>
         /// <returns>Список вещественных узлов из отрезка segment, отстоящих друг от друга на step</returns>
-        private List<double> GetPoints(Tuple<double, double> segment, double step)
+        public static List<double> GetPoints(Tuple<double, double> segment, double step)
         {
             var points = new List<double>();
 
@@ -100,7 +41,7 @@ namespace InterpolationApp
         /// <param name="points">Список узлов - параметров функции</param>
         /// <param name="precision">Точность вычисления</param>
         /// <returns>Список значений функции в узлах</returns>
-        private List<double> GetValues(FunctionDelegate function, List<double> points, double precision)
+        public static List<double> GetValues(FunctionDelegate function, List<double> points, double precision)
         {
             var values = new List<double>();
             points.ForEach(p => values.Add((Truncate(precision, function(p)))));
@@ -113,7 +54,7 @@ namespace InterpolationApp
         /// <param name="values">Список значений функции в узлах интерполяции</param>
         /// <param name="degree">Необходимый наивысший порядок для конечных разностей</param>
         /// <returns>Список из разностей порядков 0..degree</returns>
-        private List<List<double>> GetDeltas(List<double> values, int degree)
+        public static List<List<double>> GetDeltas(List<double> values, int degree)
         {
             var deltas = new List<List<double>>();
 
@@ -142,7 +83,7 @@ namespace InterpolationApp
         /// </summary>
         /// <param name="k">Необходимый наивысший порядок для системы функций</param>
         /// <returns>Список делегатов функций double -> double</returns>
-        private List<FunctionDelegate> GenerateNFunctions(int k)
+        public static List<FunctionDelegate> GenerateNFunctions(int k)
         {
             var NFunctions = new List<FunctionDelegate>
             {
@@ -163,16 +104,45 @@ namespace InterpolationApp
         /// <param name="precision">Число знаков после запятой</param>
         /// <param name="value">Округляемое значение</param>
         /// <returns>Округленное значение</returns>
-        public double Truncate(double precision, double value)
+        public static double Truncate(double precision, double value)
         {
             double revPrecision = 1 / precision;
             return Math.Truncate(revPrecision * value) / revPrecision;
         }
 
-        //public double Interpolate(double x, int n)
-        //{
-        //    var NFunctions = GenerateNFunctions(n);
+        /// <summary>
+        /// Generate the formulas for recursive Nk(t) functions
+        /// </summary>
+        /// <param name="k">Required highest degree of the system of functions</param>
+        /// <param name="t">String representation of the argument</param>
+        /// <returns>Formulas for Nk(t)</returns>
+        public static List<string> GenerateFormulaNFunctions(int k, string t)
+        {
+            var NFunctions = new List<string>();
 
-        //}
+            if (k < 0)
+                throw new ArgumentException("Number k must be non-negative!");
+
+            NFunctions.Add("1");
+
+            if (k == 0)
+                return NFunctions;
+
+            NFunctions.Add(t);
+
+            if (k == 1)
+                return NFunctions;
+
+            string numerator = t;
+
+            for (int i = 2; i <= k; i++)
+            {
+                numerator += " * (" + t + (-i + 1).ToString() + ")";
+                var denominator = Math.Pow(i, i - 1).ToString();
+                NFunctions.Add(numerator + " / " + denominator);
+            }
+
+            return NFunctions;
+        }
     }
 }
