@@ -21,10 +21,10 @@ namespace InterpolationApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var points = Interpolation.GetPoints(Segment, Step);
+            var points = Interpolation.GetPoints(Segment, InterpolationPoint, Step);
             var values = Interpolation.GetValues(Function, points, Precision);
             var deltas = Interpolation.GetDeltas(values, DeltaDegree);
-            var approximations = Interpolation.Interpolate(InterpolationPoint, values, points, DeltaDegree);
+            var approximations = Interpolation.Interpolate(InterpolationPoint, Segment, Step, values, points, DeltaDegree);
 
             FillPointValueGrid(points, values, deltas);
             CorrectPointValueGridSize();

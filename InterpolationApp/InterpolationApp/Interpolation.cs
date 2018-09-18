@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; 
 using System.Collections.Generic;
 
 namespace InterpolationApp
@@ -20,13 +20,51 @@ namespace InterpolationApp
         /// <param name="segment">Пара из координат начальной и конечной точек отрезка</param>
         /// <param name="step">Шаг для равностоящих узлов</param>
         /// <returns>Список вещественных узлов из отрезка segment, отстоящих друг от друга на step</returns>
-        public static List<double> GetPoints(Tuple<double, double> segment, double step)
+        public static List<double> GetPoints(Tuple<double, double> segment, double x, double step)
         {
             if (segment.Item1 > segment.Item2)
                 throw new ArgumentException("Left coordinate of the segment must not be greater than the right!");
             else if (segment.Item2 - segment.Item1 < step)
                 throw new ArgumentException("Step must be smaller than the length of the segment");
+            else if (segment.Item1 < x && x <= segment.Item1 + step / 2)
+                return GetPointsForTableBeginning(segment, step);
+            else if (segment.Item2 - step / 2 <= x && x < segment.Item2)
+                throw new NotImplementedException();
+            else
+                return GetPointsForTableMiddle(segment, x, step);
+        }
 
+
+        private static List<double> GetPointsForTableMiddle(Tuple<double, double> segment, double x, double step)
+        {
+            var n = Math.Round((segment.Item2 - segment.Item1) / step) + 1;
+            double a = segment.Item1;
+
+            for (int i = 0; i < n; i++)
+            {
+                double y = segment.Item1 + step * i;
+                if (y < x && y + step / 2 <= x)
+                {
+                    a = y;
+                }
+            }
+
+            double min = Math.Min(segment.Item2 - a, a - segment.Item1);
+            int k = Convert.ToInt32(min / step);
+
+            var points = new List<double>();
+
+            for (int i = -k; i <= k; i++)
+            {
+                points.Add(a + i * step);
+            }
+
+            return points;
+        }
+
+        private static List<double> GetPointsForTableBeginning(Tuple<double, double> segment, double step)
+        {
+           
             var points = new List<double>();
 
             var n = Math.Round((segment.Item2 - segment.Item1) / step) + 1;
@@ -163,7 +201,25 @@ namespace InterpolationApp
             return NFunctions;
         }
 
-        public static List<double> Interpolate(double x, List<double> values, List<double> points, int k)
+        public static List<double> Interpolate(double x, 
+                                               Tuple<double, double> segment, 
+                                               double step, 
+                                               List<double> values, 
+                                               List<double> points, int k)
+        {
+            if (segment.Item1 > segment.Item2)
+                throw new ArgumentException("Left coordinate of the segment must not be greater than the right!");
+            else if (segment.Item2 - segment.Item1 < step)
+                throw new ArgumentException("Step must be smaller than the length of the segment");
+            else if (segment.Item1 < x && x <= segment.Item1 + step / 2)
+                return InterpolateBeginningPoint(x, values, points, k);
+            else if (segment.Item2 - step / 2 <= x && x < segment.Item2)
+                throw new NotImplementedException();
+            else
+                return InterpolateMiddlePoint(x, values, points, k);
+        }
+
+        private static List<double> InterpolateMiddlePoint(double x, List<double> values, List<double> points, int k)
         {
             var approxValues = new List<double>();
 
@@ -173,7 +229,29 @@ namespace InterpolationApp
             deltas.Insert(0, values);
             var nFunctions = GenerateNFunctions(k);
 
-            //N for k = 2 isn't right for some reason
+            var index = points.FindLastIndex(point => point <= x);
+
+            for (int i = 0; i <= k; i++)
+            {
+                prevN = nFunctions[i](x, prevN);
+                prevP = prevP + prevN * deltas[i][index];
+                index -= i % 2 == 0 ? 0 : 1;
+                approxValues.Add(prevP);
+            }
+
+            return approxValues;
+        }
+
+        private static List<double> InterpolateBeginningPoint(double x, List<double> values, List<double> points, int k)
+        {
+            var approxValues = new List<double>();
+
+            double prevP = 0;
+            double prevN = 1;
+            var deltas = GetDeltas(values, k);
+            deltas.Insert(0, values);
+            var nFunctions = GenerateNFunctions(k);
+
             for (int i = 0; i <= k; i++)
             {
                 prevN = nFunctions[i](x, prevN);
@@ -183,5 +261,7 @@ namespace InterpolationApp
 
             return approxValues;
         }
+        
+        //TODO: объявить в перечислении типы расположения точек, сделать процедуру сопоставления
     }
 }
