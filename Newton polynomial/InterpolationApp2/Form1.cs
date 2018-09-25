@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.Interpolation;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -46,6 +47,8 @@ namespace InterpolationApp2
             var errors = GetCalculationError(FunctionValue, interpolatedValues);
 
             FillResultGrid(newPoints, interpolatedValues, errors);
+
+            var res = Differentiation(newPoints, newValues, IntPoint, 2);
         }
 
         private void FillDiffGrid(List<double> points, List<double> values, List<List<double>> diffList)
@@ -166,6 +169,25 @@ namespace InterpolationApp2
             }
 
             return result;
+        }
+
+        private double Differentiation(List<double> points, List<double> values, double diffPoint, int degree)
+        {
+            double recDifferentiation (List<double> newValues, int newDegree)
+            {
+                if (newDegree == 0)
+                {
+                    return CubicSpline.InterpolateNatural(points, newValues).Differentiate(diffPoint);
+                }
+                else
+                {
+                    var cs = CubicSpline.InterpolateNatural(points, newValues);
+                    newValues = points.Select(point => cs.Differentiate(point)).ToList();
+                    return recDifferentiation(newValues, newDegree - 1);
+                }
+            }
+
+            return recDifferentiation(values, degree);
         }
 
         //найти Mi+1 как максимум производной и погрешность
