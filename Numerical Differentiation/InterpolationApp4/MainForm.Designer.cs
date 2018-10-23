@@ -38,12 +38,19 @@
             this.ColumnFNumError2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnFNum3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnFNumError3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaxError = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExpectedStepColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ObservedStepColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DerivativeGrid)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // DerivativeGrid
             // 
             this.DerivativeGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DerivativeGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
             this.DerivativeGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DerivativeGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnX,
@@ -54,11 +61,14 @@
             this.ColumnFNum2,
             this.ColumnFNumError2,
             this.ColumnFNum3,
-            this.ColumnFNumError3});
-            this.DerivativeGrid.Dock = System.Windows.Forms.DockStyle.Top;
-            this.DerivativeGrid.Location = new System.Drawing.Point(0, 0);
+            this.ColumnFNumError3,
+            this.MaxError,
+            this.ExpectedStepColumn,
+            this.ObservedStepColumn});
+            this.DerivativeGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DerivativeGrid.Location = new System.Drawing.Point(0, 24);
             this.DerivativeGrid.Name = "DerivativeGrid";
-            this.DerivativeGrid.Size = new System.Drawing.Size(800, 224);
+            this.DerivativeGrid.Size = new System.Drawing.Size(1055, 261);
             this.DerivativeGrid.TabIndex = 0;
             // 
             // ColumnX
@@ -106,17 +116,54 @@
             this.ColumnFNumError3.HeaderText = "O(h)";
             this.ColumnFNumError3.Name = "ColumnFNumError3";
             // 
+            // MaxError
+            // 
+            this.MaxError.HeaderText = "max O(h)";
+            this.MaxError.Name = "MaxError";
+            // 
+            // ExpectedStepColumn
+            // 
+            this.ExpectedStepColumn.HeaderText = "expected h";
+            this.ExpectedStepColumn.Name = "ExpectedStepColumn";
+            // 
+            // ObservedStepColumn
+            // 
+            this.ObservedStepColumn.HeaderText = "observed h";
+            this.ObservedStepColumn.Name = "ObservedStepColumn";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AboutToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1055, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // AboutToolStripMenuItem
+            // 
+            this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.AboutToolStripMenuItem.Text = "О программе";
+            this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1055, 285);
             this.Controls.Add(this.DerivativeGrid);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DerivativeGrid)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -132,6 +179,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFNumError2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFNum3;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFNumError3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MaxError;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExpectedStepColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ObservedStepColumn;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
     }
 }
 
