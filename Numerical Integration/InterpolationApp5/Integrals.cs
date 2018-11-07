@@ -20,6 +20,17 @@ namespace InterpolationApp5
     {
         public delegate double FunctionDelegate(double x);
 
+        // Algebraic Degree Of Accuracy For Quadratic Formula
+        private static readonly int ADALeftRectangles = 0;
+        private static readonly int ADATrapezoid = 1;
+        private static readonly int ADASimpsons = 3;
+
+        // Constant for error calculation
+        private static readonly double CLeftRectangles = 0.5;
+        private static readonly double CTrapezoid = 1 / 12;
+        private static readonly double CSimpsons = 1 / 2880;
+
+
         public static IEnumerable<double> Double(double from, double to, double h)
         {
             if (h <= 0.0) h = (h == 0.0) ? 1.0 : -h;
@@ -39,7 +50,7 @@ namespace InterpolationApp5
             return (interval.Right - interval.Left) / n;
         }
 
-        public static double CalculateLeftRectangesIntegral(Interval interval, int n, FunctionDelegate f)
+        public static double CalculateLeftRectanglesIntegral(Interval interval, int n, FunctionDelegate f)
         {
             double h = GetStep(interval, n);
             double sum = 0;
@@ -101,19 +112,19 @@ namespace InterpolationApp5
             return c * Math.Pow(interval.Right - interval.Left, d + 2) / Math.Pow(n, d + 1) * maxDf;
         }
 
-        public static double GetErrorForLeftRectanges(Interval interval, int n, FunctionDelegate df)
+        public static double GetErrorForLeftRectangles(Interval interval, int n, FunctionDelegate df)
         {
-            return GetError(0.5, interval, n, 0, df);
+            return GetError(CLeftRectangles, interval, n, ADALeftRectangles, df);
         }
 
         public static double GetErrorForTrapezoidIntegral(Interval interval, int n, FunctionDelegate df)
         {
-            return GetError(1 / 12, interval, n, 1, df);
+            return GetError(CTrapezoid, interval, n, ADATrapezoid, df);
         }
 
         public static double GetErrorForSimpsonsIntegral(Interval interval, int n, FunctionDelegate df)
         {
-            return GetError(1 / 2880, interval, n, 3, df);
+            return GetError(CSimpsons, interval, n, ADASimpsons, df);
         }
 
         private static double GetMaxFunctionValue(Interval interval, int n, FunctionDelegate f)
@@ -126,26 +137,26 @@ namespace InterpolationApp5
             return (S2n - Sn) / (Math.Pow(2, d + 1) - 1);
         }
 
-        public static double GetMainErrorForLeftRectanges(double S2n, double Sn)
+        public static double GetMainErrorForLeftRectangles(double S2n, double Sn)
         {
-            return GetMainError(S2n, Sn, 0);
+            return GetMainError(S2n, Sn, ADALeftRectangles);
         }
 
         public static double GetMainErrorForTrapezoidIntegral(double S2n, double Sn)
         {
-            return GetMainError(S2n, Sn, 1);
+            return GetMainError(S2n, Sn, ADATrapezoid);
         }
 
         public static double GetMainErrorForSimpsonsIntegral(double S2n, double Sn)
         {
-            return GetMainError(S2n, Sn, 3);
+            return GetMainError(S2n, Sn, ADASimpsons);
         }
 
-        public static double GetMainErrorForLeftRectanges(Interval interval, int n, FunctionDelegate f)
+        public static double GetMainErrorForLeftRectangles(Interval interval, int n, FunctionDelegate f)
         {
-            var Sn = CalculateLeftRectangesIntegral(interval, n, f);
-            var S2n = CalculateLeftRectangesIntegral(interval, 2 * n, f);
-            return GetMainErrorForLeftRectanges(S2n, Sn);
+            var Sn = CalculateLeftRectanglesIntegral(interval, n, f);
+            var S2n = CalculateLeftRectanglesIntegral(interval, 2 * n, f);
+            return GetMainErrorForLeftRectangles(S2n, Sn);
         }
 
         public static double GetMainErrorForTrapezoidIntegral(Interval interval, int n, FunctionDelegate f)
