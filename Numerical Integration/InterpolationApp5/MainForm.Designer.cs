@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGrid = new System.Windows.Forms.DataGridView();
             this.MethodColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SnColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IntergralSnDDiffColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -39,14 +39,18 @@
             this.RmainColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IAdjustedColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IntergralIAdjustedDiffColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelIntegral = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelIntegralFunction = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGrid
             // 
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.MethodColumn,
             this.SnColumn,
             this.IntergralSnDDiffColumn,
@@ -57,11 +61,11 @@
             this.RmainColumn,
             this.IAdjustedColumn,
             this.IntergralIAdjustedDiffColumn});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(800, 450);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGrid.Location = new System.Drawing.Point(0, 0);
+            this.dataGrid.Name = "dataGrid";
+            this.dataGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGrid.Size = new System.Drawing.Size(957, 110);
+            this.dataGrid.TabIndex = 0;
             // 
             // MethodColumn
             // 
@@ -113,22 +117,65 @@
             this.IntergralIAdjustedDiffColumn.HeaderText = "I - Iad";
             this.IntergralIAdjustedDiffColumn.Name = "IntergralIAdjustedDiffColumn";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 167);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Integral exact value";
+            // 
+            // labelIntegral
+            // 
+            this.labelIntegral.AutoSize = true;
+            this.labelIntegral.Location = new System.Drawing.Point(144, 167);
+            this.labelIntegral.Name = "labelIntegral";
+            this.labelIntegral.Size = new System.Drawing.Size(0, 13);
+            this.labelIntegral.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 138);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(42, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Integral";
+            // 
+            // labelIntegralFunction
+            // 
+            this.labelIntegralFunction.AutoSize = true;
+            this.labelIntegralFunction.Location = new System.Drawing.Point(144, 138);
+            this.labelIntegralFunction.Name = "labelIntegralFunction";
+            this.labelIntegralFunction.Size = new System.Drawing.Size(0, 13);
+            this.labelIntegralFunction.TabIndex = 4;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGridView1);
+            this.ClientSize = new System.Drawing.Size(958, 248);
+            this.Controls.Add(this.labelIntegralFunction);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelIntegral);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.dataGrid);
+            this.MaximumSize = new System.Drawing.Size(974, 287);
+            this.MinimumSize = new System.Drawing.Size(974, 287);
             this.Name = "MainForm";
-            this.Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Integrals";
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn MethodColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn SnColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn IntergralSnDDiffColumn;
@@ -139,6 +186,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn RmainColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn IAdjustedColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn IntergralIAdjustedDiffColumn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelIntegral;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelIntegralFunction;
     }
 }
 

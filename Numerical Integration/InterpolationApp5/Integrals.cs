@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace InterpolationApp5
 {
+    /// <summary>
+    /// Interval class for interpolation methods
+    /// </summary>
     public class Interval
     {
         public Interval(double left, double right)
@@ -16,21 +18,41 @@ namespace InterpolationApp5
         public double Right { get; set; }
     }
 
+    /// <summary>
+    /// Integral class based on numeric analysis methods
+    /// </summary>
     public static class Integrals
     {
+        /// <summary>
+        /// Function delegate for one argument function
+        /// </summary>
+        /// <param name="x">Argument value</param>
+        /// <returns>Function value in x</returns>
         public delegate double FunctionDelegate(double x);
 
-        // Algebraic Degree Of Accuracy For Quadratic Formula
-        private static readonly int ADALeftRectangles = 0;
-        private static readonly int ADATrapezoid = 1;
-        private static readonly int ADASimpsons = 3;
+        #region Constants
 
-        // Constant for error calculation
-        private static readonly double CLeftRectangles = 0.5;
-        private static readonly double CTrapezoid = 1 / 12;
-        private static readonly double CSimpsons = 1 / 2880;
+        // Algebraic Degree Of Accuracy For Quadratic Formulas
+        public static readonly int DLeftRectangles = 0;
+        public static readonly int DTrapezoid = 1;
+        public static readonly int DSimpsons = 3;
 
+        // Constants for error calculation
+        public static readonly double CLeftRectangles = 0.5;
+        public static readonly double CTrapezoid = 1 / 12;
+        public static readonly double CSimpsons = 1 / 2880;
 
+        #endregion
+
+        #region IntervalMethods
+
+        /// <summary>
+        /// Generates IEnumerable sequence
+        /// </summary>
+        /// <param name="from">Starting point</param>
+        /// <param name="to">Finishing point</param>
+        /// <param name="h">Step</param>
+        /// <returns>IEnumerable with points</returns>
         public static IEnumerable<double> Double(double from, double to, double h)
         {
             if (h <= 0.0) h = (h == 0.0) ? 1.0 : -h;
@@ -45,11 +67,28 @@ namespace InterpolationApp5
             }
         }
 
+        /// <summary>
+        /// Calculates the step for interval partition
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments the interval is partitioned</param>
+        /// <returns>Step for the partition</returns>
         private static double GetStep(Interval interval, double n)
         {
             return (interval.Right - interval.Left) / n;
         }
 
+        #endregion
+
+        #region CalculateIntegral
+
+        /// <summary>
+        /// Calculates the integral by left rectangles method
+        /// </summary>
+        /// <param name="interval">Interval of points for function arguments</param>
+        /// <param name="n">Number of segments the interval is partitioned</param>
+        /// <param name="f">Function delegate of under integral function</param>
+        /// <returns>The calculated value of the integral</returns>
         public static double CalculateLeftRectanglesIntegral(Interval interval, int n, FunctionDelegate f)
         {
             double h = GetStep(interval, n);
@@ -64,13 +103,20 @@ namespace InterpolationApp5
             return h * sum;
         }
 
+        /// <summary>
+        /// Calculates the integral by trapezoid method
+        /// </summary>
+        /// <param name="interval">Interval of points for function arguments</param>
+        /// <param name="n">Number of segments the interval is partitioned</param>
+        /// <param name="f">Function delegate of under integral function</param>
+        /// <returns>The calculated value of the integral</returns>
         public static double CalcualteTrapezoidIntegral(Interval interval, int n, FunctionDelegate f)
         {
             double h = GetStep(interval, n);
             double sum = 0;
             double x;
             
-            for (int i = 1; i < n - 1; i++)
+            for (int i = 1; i < n; i++)
             {
                 x = interval.Left + i * h;
                 sum += f(x);
@@ -81,6 +127,13 @@ namespace InterpolationApp5
             return  coeff * sum;
         }
 
+        /// <summary>
+        /// Calculates the integral by Simpsons method
+        /// </summary>
+        /// <param name="interval">Interval of points for function arguments</param>
+        /// <param name="n">Number of segments the interval is partitioned</param>
+        /// <param name="f">Function delegate of under integral function</param>
+        /// <returns>The calculated value of the integral</returns>
         public static double CalculateSimpsonsIntergral(Interval interval, int n, FunctionDelegate f)
         {
             n *= 2;
@@ -106,52 +159,123 @@ namespace InterpolationApp5
             return coeff * sum;
         }
 
-        public static double GetError(double c, Interval interval, int n, int d, FunctionDelegate df)
+        /// <summary>
+        /// Get adjusted integral value
+        /// </summary>
+        /// <param name="S2n">Sum for chosen method with N = 2 * n</param>
+        /// <param name="Rmain">Main error</param>
+        /// <returns>Adjusted integral</returns>
+        public static double GetAdjustedIntegral(double S2n, double Rmain)
         {
-            var maxDf = GetMaxFunctionValue(interval, n, df);
+            return S2n + Rmain;
+        }
+
+        #endregion
+
+        #region Errors
+
+        /// <summary>
+        /// Get Rn error for chosen method
+        /// </summary>
+        /// <param name="c">Constant specific for the chosen method</param>
+        /// <param name="interval">Interval of points for function's argument</param>
+        /// <param name="n">Number of segments the interval is partitioned</param>
+        /// <param name="d">Algebraic degree of accuracy specific for the method</param>
+        /// <param name="maxDf">Function maximum on the given interval of absolute values of under integral sign function derivative with degree of (d + 1)</param>
+        /// <returns>Calculated error for the chosen method</returns>
+        public static double GetError(double c, Interval interval, int n, int d, double maxDf)
+        {
             return c * Math.Pow(interval.Right - interval.Left, d + 2) / Math.Pow(n, d + 1) * maxDf;
         }
 
-        public static double GetErrorForLeftRectangles(Interval interval, int n, FunctionDelegate df)
+        /// <summary>
+        /// Get Rn error for left rectangles method
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments after interval partition</param>
+        /// <param name="maxDf">Function maximum on the given interval of absolute values of under integral sign function derivative with degree of 1</param>
+        /// <returns>Calculated error</returns>
+        public static double GetErrorForLeftRectangles(Interval interval, int n, double maxDf)
         {
-            return GetError(CLeftRectangles, interval, n, ADALeftRectangles, df);
+            return GetError(CLeftRectangles, interval, n, DLeftRectangles, maxDf);
         }
 
-        public static double GetErrorForTrapezoidIntegral(Interval interval, int n, FunctionDelegate df)
+        /// <summary>
+        /// Get Rn error for trapezoid method
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments after interval partition</param>
+        /// <param name="maxDf">Function maximum on the given interval of absolute values of under integral sign function derivative with degree of 2</param>
+        /// <returns>Calculated error</returns>
+        public static double GetErrorForTrapezoidIntegral(Interval interval, int n, double maxDf)
         {
-            return GetError(CTrapezoid, interval, n, ADATrapezoid, df);
+            return GetError(CTrapezoid, interval, n, DTrapezoid, maxDf);
         }
 
-        public static double GetErrorForSimpsonsIntegral(Interval interval, int n, FunctionDelegate df)
+        /// <summary>
+        /// Get Rn error for Simpsons method
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments after interval partition</param>
+        /// <param name="maxDf">Function maximum on the given interval of absolute values of under integral sign function derivative with degree of 4</param>
+        /// <returns>Calculated error</returns>
+        public static double GetErrorForSimpsonsIntegral(Interval interval, int n, double maxDf)
         {
-            return GetError(CSimpsons, interval, n, ADASimpsons, df);
+            return GetError(CSimpsons, interval, n, DSimpsons, maxDf);
         }
 
-        private static double GetMaxFunctionValue(Interval interval, int n, FunctionDelegate f)
-        {
-            return Double(interval.Left, interval.Right, (interval.Right - interval.Left) / n).Select(x => Math.Abs(f(x))).Max();
-        }
-
+        /// <summary>
+        /// Get Rmain for chosen method
+        /// </summary>
+        /// <param name="S2n">Calculated sum by this method for N = 2 * n</param>
+        /// <param name="Sn">Calculated sum by this method for N = n</param>
+        /// <param name="d">Algebraic degree of accuracy specific for the method</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainError(double S2n, double Sn, int d)
         {
             return (S2n - Sn) / (Math.Pow(2, d + 1) - 1);
         }
 
+        /// <summary>
+        /// Get Rmain for left rectangles method
+        /// </summary>
+        /// <param name="S2n">Calculated sum for N = 2 * n</param>
+        /// <param name="Sn">Calculated sum for N = n</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainErrorForLeftRectangles(double S2n, double Sn)
         {
-            return GetMainError(S2n, Sn, ADALeftRectangles);
+            return GetMainError(S2n, Sn, DLeftRectangles);
         }
 
+        /// <summary>
+        /// Get Rmain for trapezoid method
+        /// </summary>
+        /// <param name="S2n">Calculated sum for N = 2 * n</param>
+        /// <param name="Sn">Calculated sum for N = n</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainErrorForTrapezoidIntegral(double S2n, double Sn)
         {
-            return GetMainError(S2n, Sn, ADATrapezoid);
+            return GetMainError(S2n, Sn, DTrapezoid);
         }
 
+        /// <summary>
+        /// Get Rmain for Simpsons method
+        /// </summary>
+        /// <param name="S2n">Calculated sum for N = 2 * n</param>
+        /// <param name="Sn">Calculated sum for N = n</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainErrorForSimpsonsIntegral(double S2n, double Sn)
         {
-            return GetMainError(S2n, Sn, ADASimpsons);
+            return GetMainError(S2n, Sn, DSimpsons);
         }
 
+        /// <summary>
+        /// Get Rmain for left rectangles method
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments after interval partition</param>
+        /// <param name="f">Function delegate of under integral sign function</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainErrorForLeftRectangles(Interval interval, int n, FunctionDelegate f)
         {
             var Sn = CalculateLeftRectanglesIntegral(interval, n, f);
@@ -159,6 +283,13 @@ namespace InterpolationApp5
             return GetMainErrorForLeftRectangles(S2n, Sn);
         }
 
+        /// <summary>
+        /// Get Rmain for trapezoid method
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments after interval partition</param>
+        /// <param name="f">Function delegate of under integral sign function</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainErrorForTrapezoidIntegral(Interval interval, int n, FunctionDelegate f)
         {
             var Sn = CalcualteTrapezoidIntegral(interval, n, f);
@@ -166,6 +297,13 @@ namespace InterpolationApp5
             return GetMainErrorForTrapezoidIntegral(S2n, Sn);
         }
 
+        /// <summary>
+        /// Get Rmain for Simpsons method
+        /// </summary>
+        /// <param name="interval">Interval of points</param>
+        /// <param name="n">Number of segments after interval partition</param>
+        /// <param name="f">Function delegate of under integral sign function</param>
+        /// <returns>Calculated main error</returns>
         public static double GetMainErrorForSimpsonsIntegral(Interval interval, int n, FunctionDelegate f)
         {
             var Sn = CalculateSimpsonsIntergral(interval, n, f);
@@ -173,9 +311,6 @@ namespace InterpolationApp5
             return GetMainErrorForSimpsonsIntegral(S2n, Sn);
         }
 
-        public static double GetAdjustedIntegral(double S2n, double Rmain)
-        {
-            return S2n + Rmain;
-        }
+        #endregion
     }
 }
