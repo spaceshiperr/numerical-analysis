@@ -186,14 +186,7 @@ namespace InterpolationApp6
             for (int i = 1; i < n; i++)
             {
                 x = interval.Left + i * h;
-                if (i % 2 == 0)
-                {
-                    sum += 2 * f(x);
-                }
-                else
-                {
-                    sum += 4 * f(x);
-                }
+                sum += f(x) * (i % 2 == 0 ? 2 : 4);
             }
 
             sum += f(interval.Left) + f(interval.Right);
