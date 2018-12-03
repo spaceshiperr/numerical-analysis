@@ -28,47 +28,63 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.integralValueLabel = new System.Windows.Forms.Label();
-            this.middleRectanglesLabel = new System.Windows.Forms.Label();
+            this.intGridView = new System.Windows.Forms.DataGridView();
+            this.NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ErrorColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.intGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // integralValueLabel
+            // intGridView
             // 
-            this.integralValueLabel.AutoSize = true;
-            this.integralValueLabel.Location = new System.Drawing.Point(26, 24);
-            this.integralValueLabel.Name = "integralValueLabel";
-            this.integralValueLabel.Size = new System.Drawing.Size(74, 13);
-            this.integralValueLabel.TabIndex = 0;
-            this.integralValueLabel.Text = "Integral value:";
+            this.intGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.intGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.intGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.intGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.NameColumn,
+            this.ValueColumn,
+            this.ErrorColumn});
+            this.intGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.intGridView.Location = new System.Drawing.Point(0, 0);
+            this.intGridView.Name = "intGridView";
+            this.intGridView.Size = new System.Drawing.Size(800, 144);
+            this.intGridView.TabIndex = 2;
             // 
-            // middleRectanglesLabel
+            // NameColumn
             // 
-            this.middleRectanglesLabel.AutoSize = true;
-            this.middleRectanglesLabel.Location = new System.Drawing.Point(26, 54);
-            this.middleRectanglesLabel.Name = "middleRectanglesLabel";
-            this.middleRectanglesLabel.Size = new System.Drawing.Size(144, 13);
-            this.middleRectanglesLabel.TabIndex = 1;
-            this.middleRectanglesLabel.Text = "Integral by middle rectangles:";
+            this.NameColumn.HeaderText = "Method";
+            this.NameColumn.Name = "NameColumn";
+            // 
+            // ValueColumn
+            // 
+            this.ValueColumn.HeaderText = "Integral value";
+            this.ValueColumn.Name = "ValueColumn";
+            // 
+            // ErrorColumn
+            // 
+            this.ErrorColumn.HeaderText = "Error";
+            this.ErrorColumn.Name = "ErrorColumn";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.middleRectanglesLabel);
-            this.Controls.Add(this.integralValueLabel);
+            this.ClientSize = new System.Drawing.Size(800, 144);
+            this.Controls.Add(this.intGridView);
             this.Name = "MainForm";
             this.Text = "Integrals calculation based on numerical analysis methods";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.intGridView)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label integralValueLabel;
-        private System.Windows.Forms.Label middleRectanglesLabel;
+        private System.Windows.Forms.DataGridView intGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ValueColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ErrorColumn;
     }
 }
 
