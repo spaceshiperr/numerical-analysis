@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InterpolationApp6
 {
@@ -202,6 +203,28 @@ namespace InterpolationApp6
         public static double GetAdjustedIntegral(double S2n, double Rmain)
         {
             return S2n + Rmain;
+        }
+
+        /// <summary>
+        /// Calculates integral using interpolation
+        /// </summary>
+        /// <param name="points">List of x points</param>
+        /// <param name="Ak">List of positive constants</param>
+        /// <param name="f">Smooth function calculated as under integral function divided by weight function</param>
+        /// <returns>Value of the integral</returns>
+        public static double CalculateInterpolationIntegral(List<double> points, List<double> Ak, FunctionDelegate f)
+        {
+            return points.Select((x, i) => f(x) * Ak[i]).Sum();
+        }
+
+        /// <summary>
+        /// Calculates Gaussian integral for n = 3 using Legendre polynomials 
+        /// </summary>
+        /// <param name="f">Smooth function calculated as under integral function divided by weight function</param>
+        /// <returns>Value of the integral</returns>
+        public static double CalculateGaussianIntegral(FunctionDelegate f)
+        {
+            return (5 / 9 * f(-Math.Sqrt(3 / 5)) + 8 / 9 * f(0) + 5 / 9 * f(Math.Sqrt(3 / 5)));
         }
 
         #endregion
