@@ -113,7 +113,7 @@ namespace InterpolaionApp3
 
             while (Math.Abs(b - a) > precision)
             {
-                c = (b - a) / 2;
+                c = (a + b) / 2;
 
                 if (function(a) * function(c) < 0)
                 {
